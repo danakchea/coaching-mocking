@@ -1,38 +1,45 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import org.mockito.MockitoAnnotations;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class ATMControllerTest {
 
-    @Mock
+    ATMController atmControllerTrue;
+    ATMController atmControllerFalse;
     ATMController atmController;
 
-    @InjectMocks
     ATMService atmService;
 
     @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+    public void setup() {
+        atmService = mock ( ATMService.class );
+        atmControllerTrue = new ATMController ( atmService , true );
+        atmControllerFalse = new ATMController ( atmService , false );
+        atmController = new ATMController ( atmService );
     }
 
     @Test
-    public void getBalanceTestEqual()
+    public void getBalanceTestTrue()
     {
-        when(atmController.getBalance()).thenReturn(20.00);
-        assertEquals(atmService.getBalance(),atmController.getBalance(),1);
+        when(atmService.getBalance()).thenReturn(10.00);
+        assertEquals ( 10.00 , atmControllerTrue.getBalance () ,1 );
     }
 
     @Test
-    public void getBalanceTestNotEquals()
+    public void getBalanceTestFalse()
     {
-        when(atmController.getBalance()).thenReturn(31.00);
-        assertNotEquals(atmService.getBalance(),atmController.getBalance(),1);
+        when(atmService.getBalance()).thenReturn(10.00);
+        assertEquals ( 00.00 , atmControllerFalse.getBalance () ,1 );
     }
+
+    @Test
+    public void getBalanceTestNormal()
+    {
+        when(atmService.getBalance()).thenReturn(10.00);
+        assertEquals ( 10.00 , atmController.getBalance () ,1 );
+    }
+
 }
